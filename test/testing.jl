@@ -1,5 +1,4 @@
 using Test
-
 using BackedUpImmutable
 
 function testBackedUpImmutableDict()
@@ -7,18 +6,15 @@ function testBackedUpImmutableDict()
         "e" => 3, "f" => 5, "g" => 8, "h" => 13, "i" => 21, "j" => 34, "extra" => -1])
 
     x = fibr["extra"]
+    @test x == -1
     fibr["extra"] = 0
     y = fibr["extra"]
+    @test y == 0
     restore!(fibr, "extra")
     z = fibr["extra"]
-    println("first $x, then $y, then back to $z")
+    @test z == -1
     
-    try
-        fibr["k"] = 55
-    catch
-        println("throws ok for readonly")
-    end
-
+    @test_throws LoadErrror  fibr["k"] = 55
 end
 
 testBackedUpImmutableDict()
