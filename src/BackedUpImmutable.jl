@@ -66,7 +66,9 @@ end
 """
    # Restore all values back to defaults
 """
-restoreall!(dic) = begin dic.d = StaticDict(collect(dic.defaults)) end
+function restoreall!(dic)
+    dic.d = StaticDict(collect(dic.defaults))
+end
 
 
 end # module
