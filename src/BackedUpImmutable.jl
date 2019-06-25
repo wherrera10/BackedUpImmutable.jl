@@ -15,6 +15,16 @@ function Base.ImmutableDict(pairs::Vector{Pair{K,V}}) where V where K
     id
 end
 
+""" Constructor for StaticDict to take a series of pairs, varargs style """
+function Base.ImmutableDict(pairs...)
+    pairvect = [pairs...]
+    id = Base.ImmutableDict(pairvect[1][1] => pairvect[1][2])
+    for p in pairvect[2:end]
+        id = StaticDict(id, p[1] => p[2])
+    end
+    id
+end
+
 """
     # BackedUpImmutableDict{K, V} 
     * Combines a key, not value, immutable hash dictionary with a backup of the original value defaults.
