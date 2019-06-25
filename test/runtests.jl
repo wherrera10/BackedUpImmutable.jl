@@ -17,7 +17,7 @@ function testBackedUpImmutableDict()
     z = fibr["extra"]
     @test z == -1
     
-    @test_throws LoadErrror  fibr["k"] = 55
+    @test_throws String  fibr["k"] = 55
 end
 
 testBackedUpImmutableDict()
