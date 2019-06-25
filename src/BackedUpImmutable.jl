@@ -20,7 +20,8 @@ end
 BackedUpImmutableDict{K,V}(pairs::Vector{Pair{K,V}}) where V where K =
     BackedUpImmutableDict(StaticDict(pairs), Dict{K,V}(pairs...))
 
-BackedUpImmutableDict{K,V}(pairs...) = BackedUpImmutableDict(StaticDict([pairs...]), Dict{K,V}(pairs...))
+BackedUpImmutableDict(pairs...) = BackedUpImmutableDict([pairs...]) 
+
 
 getindex(dic::BackedUpImmutableDict, k) = dic.d[k]
 
