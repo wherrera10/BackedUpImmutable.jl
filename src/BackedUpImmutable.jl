@@ -1,19 +1,24 @@
 module BackedUpImmutable
 
-export BackedUpImmutableDict, getindex, setindex!, get!, get, restore!
+export StaticDict, BackedUpImmutableDict, getindex, setindex!, get!, get, restore!
+
+StaticDict = Base.ImmutableDict
+
+StaticDict(pairs)
+    id = StaticDict(pairs[1][1] => pairs[1][2])
+    for p in pairs[2:end]
+        id = StaticDict(id, p[1] => p[2])
+    end
+    id
+end
 
 mutable struct BackedUpImmutableDict{K, V} <: AbstractDict{K,V}
-    d::Base.ImmutableDict
+    d::StaticDict
     defaults::Dict{K, V}
 end
 
-function BackedUpImmutableDict{K,V}(pairs::Vector{Pair{K,V}}) where V where K
-    id = Base.ImmutableDict(pairs[1][1] => pairs[1][2])
-    for p in pairs[2:end]
-        id = Base.ImmutableDict(id, p[1] => p[2])
-    end
-    BackedUpImmutableDict(id, Dict{K,V}(pairs...))
-end
+function BackedUpImmutableDict{K,V}(pairs::Vector{Pair{K,V}}) where V where K = 
+    BackedUpImmutableDict(StaticDict(pairs), Dict{K,V}(pairs...))
 
 getindex(dic::BackedUpImmutableDict, k) = dic.d[k]
 
