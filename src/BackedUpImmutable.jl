@@ -4,7 +4,7 @@ export StaticDict, BackedUpImmutableDict, getindex, setindex!, get!, get, restor
 
 StaticDict = Base.ImmutableDict
 
-StaticDict(pairs)
+function StaticDict(pairs::Vector{Pair{K,V}}) where V where K
     id = StaticDict(pairs[1][1] => pairs[1][2])
     for p in pairs[2:end]
         id = StaticDict(id, p[1] => p[2])
@@ -17,7 +17,7 @@ mutable struct BackedUpImmutableDict{K, V} <: AbstractDict{K,V}
     defaults::Dict{K, V}
 end
 
-function BackedUpImmutableDict{K,V}(pairs::Vector{Pair{K,V}}) where V where K = 
+function BackedUpImmutableDict{K,V}(pairs::Vector{Pair{K,V}}) where V where K =
     BackedUpImmutableDict(StaticDict(pairs), Dict{K,V}(pairs...))
 
 getindex(dic::BackedUpImmutableDict, k) = dic.d[k]
@@ -44,4 +44,5 @@ function restore!(dic, k)
 end
 
 end # module
+
 
