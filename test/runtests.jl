@@ -20,8 +20,8 @@ function testBackedUpImmutableDict()
     @test_throws String begin fibr["k"] = 55 end
     
     # test alternative constructor
-   # fibr = BackedUpImmutableDict("a" => 0, "b" => 1, "c" => 1, "d" => 2,
-    #    "e" => 3, "f" => 5, "g" => 8, "h" => 13, "i" => 21, "j" => 34, "extra" => -1)
+    fibr = BackedUpImmutableDict{String, Int64}("a" => 0, "b" => 1, "c" => 1, "d" => 2,
+        "e" => 3, "f" => 5, "g" => 8, "h" => 13, "i" => 21, "j" => 34, "extra" => -1)
     
     fibr["a"] = 9
     fibr["b"] = 7
