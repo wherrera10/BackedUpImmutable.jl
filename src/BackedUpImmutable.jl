@@ -2,8 +2,11 @@ module BackedUpImmutable
 
 export StaticDict, BackedUpImmutableDict, getindex, setindex!, get!, get, restore!
 
+
+""" Another name for ImmutableDict, but here as with an extra constructor. """
 StaticDict = Base.ImmutableDict
 
+""" Constructor for StaticDict / ImmutableDict to take an array of key value pairs. """
 function Base.ImmutableDict(pairs::Vector{Pair{K,V}}) where V where K
     id = Base.ImmutableDict(pairs[1][1] => pairs[1][2])
     for p in pairs[2:end]
@@ -12,15 +15,26 @@ function Base.ImmutableDict(pairs::Vector{Pair{K,V}}) where V where K
     id
 end
 
+"""
+    # BackedUpImmutableDict{K, V} 
+    * Combines a reletely immutable hash dictionary with a backup of the original defaults.
+    * For configuration data storage, with a simple restore to default
+"""
 mutable struct BackedUpImmutableDict{K, V} <: AbstractDict{K,V}
     d::StaticDict
     defaults::Dict{K, V}
 end
 
+"""
+    Makes a BackedUpImmutableDict from a vector of key, value pairs
+"""
 BackedUpImmutableDict{K,V}(pairs::Vector{Pair{K,V}}) where V where K =
     BackedUpImmutableDict(StaticDict(pairs), Dict{K,V}(pairs...))
 
-BackedUpImmutableDict(pairs...) = BackedUpImmutableDict([pairs...]) 
+"""
+    Makes a BackedUpImmutableDict from a tuple of key, value pairs (varargs style)
+"""
+BackedUpImmutableDict{K,V}(pairs...) where V where K = BackedUpImmutableDict{K,V}([pairs...])
 
 
 getindex(dic::BackedUpImmutableDict, k) = dic.d[k]
@@ -39,11 +53,20 @@ end
 Base.get(dic::BackedUpImmutableDict, k, v) = get(dic.d, k, v)
 Base.get!(dic::BackedUpImmutableDict, k::K, v::V) where V where K = get!(dic.d, k, v)
 
+"""
+   # Restore a key's backed up default value.
+"""
 function restore!(dic, k)
     if haskey(dic.defaults, k)
         dic[k] = (v = dic.defaults[k])
         return v
     end
 end
+
+"""
+   # Restore all values back to defaults
+"""
+restoreall!(dic) = begin dic.d = StaticDict(collect(dic.defaults)) end
+
 
 end # module
