@@ -4,7 +4,7 @@ Contents:
 
 StaticDict
 =============
-* A Julia Dict that is the ImmutableDict found in Base, but with addtional constructors.
+* A Julia Dict that is the ImmutableDict found in Base, but with additional constructors.
 
 
 BackedUpImmutableDict
