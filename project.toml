@@ -1,6 +1,6 @@
 authors = ["William Herrera <wherrera@alahonua.com>"]
 name = "BackedUpImmutable"
-uuid = "ce7fb557-0848-50b6-86d3-b63d1ee2efeee"
+uuid = "ce7fb557-0848-50b6-86d3-b63d1ee2efee"
 version = "0.1.0"
 
 [deps]
