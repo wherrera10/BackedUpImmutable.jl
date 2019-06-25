@@ -1,6 +1,6 @@
 module BackedUpImmutable
 
-export StaticDict, BackedUpImmutableDict, getindex, setindex!, get!, get, restore!
+export StaticDict, BackedUpImmutableDict, getindex, setindex!, get!, get, restore!, restoreall!
 
 
 """ Another name for ImmutableDict, but here as with an extra constructor. """
