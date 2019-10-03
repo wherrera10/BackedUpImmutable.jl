@@ -62,6 +62,9 @@ end
 
 Base.get(dic::BackedUpImmutableDict, k, v) = get(dic.d, k, v)
 Base.get!(dic::BackedUpImmutableDict, k::K, v::V) where V where K = get!(dic.d, k, v)
+Base.length(dic::BackedUpImmutableDict) = length(dic.defaults)
+Base.iterate(dic::BackedUpImmutableDict) = iterate(dic.d)
+Base.iterate(dic::BackedUpImmutableDict, d2) = iterate(dic.d, d2)
 
 """
    # Restore a key's backed up default value.
