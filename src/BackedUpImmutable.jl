@@ -1,6 +1,9 @@
 module BackedUpImmutable
 
-export StaticDict, BackedUpImmutableDict, getindex, setindex!, get!, get, restore!, restoreall!
+import Base.getindex, Base.setindex!, Base.get!, Base.get, Base.empty!, Base.pop!
+import Base.haskey, Base.delete!, Base.iterate, Base.length
+
+export StaticDict, BackedUpImmutableDict, restore!, restoreall!
 
 
 """ Another name for ImmutableDict, but here as with an extra constructor. """
@@ -46,12 +49,17 @@ BackedUpImmutableDict{K,V}(pairs::Vector{Pair{K,V}}) where V where K =
 """
 BackedUpImmutableDict{K,V}(pairs...) where V where K = BackedUpImmutableDict{K,V}([pairs...])
 
+Base.haskey(dic::BackedUpImmutableDict, k) = haskey(dic.d[k])
+Base.getindex(dic::BackedUpImmutableDict, k) = getindex(dic.d, k)
+Base.get(dic::BackedUpImmutableDict) = get(dic.d, k)
+Base.delete!(dic::BackedUpImmutableDict, k) = throw("Cannot delete from an ImmutableDict")
+Base.empty!(dic::BackedUpImmutableDict) = throw("Cannot empty! an ImmutableDict")
+Base.pop!(dic::BackedUpImmutableDict) = throw("Cannot pop! from an ImmutableDict")
+Base.length(dic::BackedUpImmutableDict) = length(dic.d)
+Base.iterate(dic::BackedUpImmutableDict) = iterate(dic.d)
+Base.iterate(dic::BackedUpImmutableDict, s) = iterate(dic.d, s)
 
-getindex(dic::BackedUpImmutableDict, k) = dic.d[k]
-
-Base.setindex!(dic::BackedUpImmutableDict{K,V}, v::V, k::K...) where V where K = setindex!(dic.d, v,  k...)
-
-function Base.setindex!(dic::BackedUpImmutableDict{K,V}, v::V, k::K) where V where K
+function Base.setindex!(dic::BackedUpImmutableDict, v, k)
     if haskey(dic.d, k)
         id = Base.ImmutableDict(dic.d, k => v)
         dic.d = id
@@ -60,11 +68,14 @@ function Base.setindex!(dic::BackedUpImmutableDict{K,V}, v::V, k::K) where V whe
     end
 end
 
-Base.get(dic::BackedUpImmutableDict, k, v) = get(dic.d, k, v)
-Base.get!(dic::BackedUpImmutableDict, k::K, v::V) where V where K = get!(dic.d, k, v)
-Base.length(dic::BackedUpImmutableDict) = length(dic.defaults)
-Base.iterate(dic::BackedUpImmutableDict) = iterate(dic.d)
-Base.iterate(dic::BackedUpImmutableDict, d2) = iterate(dic.d, d2)
+function Base.get!(dic::BackedUpImmutableDict, k, v)
+    if haskey(dic.d, k)
+        return get(dic.c, k)
+    else
+        throw("Cannot add key $k to ImmutableDict")
+    end
+end
+
 
 """
    # Restore a key's backed up default value.
