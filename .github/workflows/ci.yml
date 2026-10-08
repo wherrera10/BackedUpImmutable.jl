@@ -68,6 +68,7 @@ jobs:
           julia --project=docs -e '
             using Documenter: doctest
             using BackedUpImmutable
+
             doctest(BackedUpImmutable)'
       - run: julia --project=docs docs/make.jl
         env:
