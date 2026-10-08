@@ -7,5 +7,6 @@ makedocs(
 
 deploydocs(
     repo = "github.com/wherrera10/BackedUpImmutable.jl.git",
-    devbranch = "main",
+     devbranch="master",
+    forcepush=true,
 )
