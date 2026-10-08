@@ -2,7 +2,7 @@ using Documenter, BackedUpImmutable
 
 makedocs(
     sitename = "BackedUpImmutable Module Documentation",
-    format = Documenter.HTML(prettyurls = false, ansitheme = "documenter-dark),
+    format = Documenter.HTML(prettyurls = false, ansitheme = "documenter-dark"),
 )
 
 deploydocs(
