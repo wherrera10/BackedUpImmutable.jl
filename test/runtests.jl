@@ -20,7 +20,7 @@ function testBackedUpImmutableDict()
     z = fibr["extra"]
     @test z == -1
     
-    @test_throws String begin fibr["k"] = 55 end
+    @test_throws ImmutableDictError begin fibr["k"] = 55 end
     
     # test alternative constructor
     fibr = BackedUpImmutableDict{String, Int64}("a" => 0, "b" => 1, "c" => 1, "d" => 2,
@@ -36,3 +36,5 @@ function testBackedUpImmutableDict()
 end
 
 testBackedUpImmutableDict()
+
+true
